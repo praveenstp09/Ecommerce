@@ -1,0 +1,159 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-gray-900);
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.blob1 {
+  position: absolute;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(99,102,241,0.25) 0%, transparent 70%);
+  top: -150px; left: -150px;
+  border-radius: 50%;
+  animation: float 6s ease-in-out infinite;
+}
+
+.blob2 {
+  position: absolute;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(6,182,212,0.2) 0%, transparent 70%);
+  bottom: -100px; right: -100px;
+  border-radius: 50%;
+  animation: float 8s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+.card {
+  background: white;
+  border-radius: var(--radius-3xl);
+  padding: 3rem 2.5rem;
+  width: 100%;
+  max-width: 440px;
+  text-align: center;
+  box-shadow: var(--shadow-2xl);
+  position: relative;
+  z-index: 1;
+}
+
+.iconWrap {
+  font-size: 3.5rem;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+
+.title {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  color: var(--color-text-primary);
+  margin: 0 0 0.5rem;
+}
+
+.subtitle {
+  color: var(--color-text-secondary);
+  font-size: var(--text-base);
+  margin: 0 0 1.25rem;
+  line-height: var(--leading-relaxed);
+}
+
+.demoHint {
+  background: var(--color-accent-50);
+  border: 1px solid var(--color-accent-200);
+  border-radius: var(--radius-xl);
+  padding: 0.625rem 1rem;
+  font-size: var(--text-sm);
+  color: var(--color-accent-700);
+  margin-bottom: 1.5rem;
+}
+
+.otpRow {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.otpInput {
+  width: 64px;
+  height: 72px;
+  text-align: center;
+  font-size: var(--text-3xl);
+  font-weight: var(--font-bold);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background: var(--color-gray-50);
+  color: var(--color-text-primary);
+  outline: none;
+  transition: all var(--transition-fast);
+  font-family: var(--font-display);
+  caret-color: var(--color-primary);
+}
+
+.otpInput.filled {
+  background: var(--color-primary-50);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.otpInput.errInput {
+  border-color: var(--color-error);
+  background: var(--color-error-50);
+}
+
+.error {
+  color: var(--color-error);
+  font-size: var(--text-sm);
+  margin: 0.5rem 0 0;
+}
+
+.resend {
+  margin-top: 1.5rem;
+}
+
+.resendTimer {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.resendBtn {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  padding: 0;
+  transition: color var(--transition-fast);
+}
+.resendBtn:hover { color: var(--color-primary-dark); }
+
+.changeNumber {
+  display: block;
+  margin-top: 1.25rem;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+.changeNumber:hover { color: var(--color-text-primary); }
+
+@media (max-width: 480px) {
+  .card { padding: 2rem 1.5rem; }
+  .otpInput { width: 52px; height: 60px; font-size: var(--text-2xl); }
+  .otpRow { gap: 0.75rem; }
+}

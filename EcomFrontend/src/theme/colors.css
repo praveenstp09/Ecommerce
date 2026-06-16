@@ -1,0 +1,169 @@
+/* ========================================
+   MAISON — SCOTT-INSPIRED COLOR SYSTEM
+   ======================================== */
+
+:root {
+  /* Primary — Deep Forest Teal */
+  --color-primary: #1a3a38;
+  --color-primary-light: #2d5552;
+  --color-primary-dark: #0f2624;
+  --color-primary-50: #f0f5f4;
+  --color-primary-100: #dce8e6;
+  --color-primary-200: #b8d1cd;
+  --color-primary-300: #8fb5af;
+  --color-primary-400: #5a8a82;
+  --color-primary-500: #1a3a38;
+  --color-primary-600: #163230;
+  --color-primary-700: #122928;
+  --color-primary-800: #0e201f;
+  --color-primary-900: #0a1817;
+
+  /* Secondary — Sage Green */
+  --color-secondary: #4a6741;
+  --color-secondary-light: #5f7f54;
+  --color-secondary-dark: #3a5232;
+  --color-secondary-50: #f3f6f2;
+  --color-secondary-100: #e6ede3;
+  --color-secondary-200: #cddbc7;
+  --color-secondary-300: #b3c9ab;
+  --color-secondary-400: #8faf82;
+  --color-secondary-500: #4a6741;
+  --color-secondary-600: #425c3a;
+  --color-secondary-700: #3a5232;
+  --color-secondary-800: #2e4228;
+  --color-secondary-900: #22321e;
+
+  /* Accent — Warm Brass / Havana */
+  --color-accent: #8b7355;
+  --color-accent-light: #a89070;
+  --color-accent-dark: #6b5840;
+  --color-accent-50: #f8f5f0;
+  --color-accent-100: #f0ebe2;
+  --color-accent-200: #e0d4c5;
+  --color-accent-300: #cdbba8;
+  --color-accent-400: #b39d82;
+  --color-accent-500: #8b7355;
+  --color-accent-600: #7a6549;
+  --color-accent-700: #6b5840;
+  --color-accent-800: #5a4a35;
+  --color-accent-900: #4a3c2b;
+
+  /* Success */
+  --color-success: #4a6741;
+  --color-success-light: #5f7f54;
+  --color-success-dark: #3a5232;
+  --color-success-50: #f3f6f2;
+  --color-success-100: #e6ede3;
+
+  /* Warning */
+  --color-warning: #b8860b;
+  --color-warning-light: #d4a017;
+  --color-warning-dark: #96700a;
+  --color-warning-50: #fdf8ed;
+  --color-warning-100: #f9eed4;
+
+  /* Error */
+  --color-error: #c0392b;
+  --color-error-light: #e74c3c;
+  --color-error-dark: #a93226;
+  --color-error-50: #fdf2f0;
+  --color-error-100: #f9e0dc;
+
+  /* Info */
+  --color-info: #2d5552;
+  --color-info-light: #3d6f6b;
+  --color-info-dark: #1a3a38;
+
+  /* Neutrals — Warm Sand & Charcoal */
+  --color-white: #FFFFFF;
+  --color-black: #000000;
+  --color-gray-50: #faf8f4;
+  --color-gray-100: #f5f1ea;
+  --color-gray-200: #ebe4d8;
+  --color-gray-300: #ddd4c4;
+  --color-gray-400: #c4b8a4;
+  --color-gray-500: #a89880;
+  --color-gray-600: #8a7a66;
+  --color-gray-700: #6b5e4e;
+  --color-gray-800: #4a4038;
+  --color-gray-900: #2a2620;
+  --color-gray-950: #1a1814;
+
+  /* Background */
+  --color-bg-primary: #f7f4ef;
+  --color-bg-secondary: #f0ebe2;
+  --color-bg-card: #ffffff;
+  --color-bg-dark: #1a2420;
+  --color-bg-dark-secondary: #2a3228;
+  --color-bg-dark-card: #2a3228;
+
+  /* Text */
+  --color-text-primary: #2a2620;
+  --color-text-secondary: #6b5e4e;
+  --color-text-muted: #a89880;
+  --color-text-inverse: #faf8f4;
+
+  /* Border */
+  --color-border: #ddd4c4;
+  --color-border-light: #ebe4d8;
+  --color-border-dark: #4a4038;
+
+  /* Gradient */
+  --gradient-primary: linear-gradient(135deg, #1a3a38 0%, #2d5552 100%);
+  --gradient-secondary: linear-gradient(135deg, #4a6741 0%, #1a3a38 100%);
+  --gradient-hero: linear-gradient(180deg, rgba(26, 36, 32, 0.3) 0%, rgba(26, 36, 32, 0.6) 100%);
+  --gradient-card: linear-gradient(135deg, rgba(26, 58, 56, 0.04) 0%, rgba(139, 115, 85, 0.04) 100%);
+  --gradient-accent: linear-gradient(135deg, #8b7355 0%, #1a3a38 100%);
+  --gradient-success: linear-gradient(135deg, #4a6741 0%, #2d5552 100%);
+
+  /* Overlay */
+  --color-overlay: rgba(26, 36, 32, 0.75);
+  --color-overlay-light: rgba(26, 36, 32, 0.35);
+
+  /* Rating */
+  --color-star: #b8860b;
+  --color-star-empty: #ddd4c4;
+
+  /* Discount */
+  --color-discount: #c0392b;
+  --color-discount-bg: #fdf2f0;
+
+  /* Badge */
+  --color-badge-new: #4a6741;
+  --color-badge-sale: #c0392b;
+  --color-badge-hot: #b8860b;
+  --color-badge-trending: #1a3a38;
+}
+
+/* Dark Mode — Deep Forest Green theme */
+[data-theme="dark"] {
+  --color-bg-primary: #081a18;
+  --color-bg-secondary: #0f2b28;
+  --color-bg-card: #0f2b28;
+  --color-text-primary: #f0f5f4;
+  --color-text-secondary: #bcd6d0;
+  --color-text-muted: #6b8e88;
+  --color-border: #183e3a;
+  --color-border-light: #0f2b28;
+  --gradient-card: linear-gradient(135deg, rgba(45, 85, 82, 0.15) 0%, rgba(26, 58, 56, 0.15) 100%);
+  --glass-bg-dark: rgba(8, 26, 24, 0.85);
+
+  /* Overwrite neutral grays to sage/forest greens */
+  --color-gray-50: #e2edeb;
+  --color-gray-100: #bcd6d0;
+  --color-gray-200: #a3beb8;
+  --color-gray-300: #7da29b;
+  --color-gray-400: #568179;
+  --color-gray-500: #39625b;
+  --color-gray-600: #284f48;
+  --color-gray-700: #1c3f3a;
+  --color-gray-800: #122e2a;
+  --color-gray-900: #0b211e;
+  --color-gray-950: #051412;
+
+  /* Premium Green shadows */
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.45);
+  --shadow-card-hover: 0 8px 30px rgba(24, 62, 58, 0.3);
+  --shadow-navbar: 0 1px 0 var(--color-border);
+  --shadow-modal: 0 20px 50px rgba(5, 20, 18, 0.65);
+}

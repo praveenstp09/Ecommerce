@@ -1,0 +1,113 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: none;
+  border-radius: 0;
+  font-family: var(--font-primary);
+  font-weight: var(--font-normal);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+  white-space: nowrap;
+  text-decoration: none;
+  outline: none;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.primary {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  border: 1px solid var(--color-primary);
+}
+.primary:hover:not(:disabled) {
+  background: transparent;
+  color: var(--color-primary);
+}
+
+.secondary {
+  background: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+}
+.secondary:hover:not(:disabled) {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+}
+.ghost:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.danger {
+  background: var(--color-error);
+  color: white;
+  border: 1px solid var(--color-error);
+}
+.danger:hover:not(:disabled) {
+  background: var(--color-error-dark);
+}
+
+.accent {
+  background: var(--color-accent);
+  color: var(--color-text-inverse);
+  border: 1px solid var(--color-accent);
+}
+
+.success {
+  background: var(--color-success);
+  color: var(--color-text-inverse);
+  border: 1px solid var(--color-success);
+}
+
+.dark {
+  background: var(--color-bg-dark);
+  color: var(--color-text-inverse);
+  border: 1px solid var(--color-bg-dark);
+}
+
+.xs  { padding: 0.35rem 0.875rem; font-size: 10px; }
+.sm  { padding: 0.5rem 1.25rem;  font-size: var(--text-xs); }
+.md  { padding: 0.75rem 1.75rem; font-size: var(--text-xs); }
+.lg  { padding: 1rem 2.25rem;    font-size: var(--text-sm); }
+.xl  { padding: 1.25rem 2.75rem; font-size: var(--text-sm); }
+
+.fullWidth { width: 100%; }
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.1em;
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid rgba(255,255,255,0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
