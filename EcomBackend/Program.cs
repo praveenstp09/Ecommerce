@@ -21,11 +21,16 @@ namespace WebApplication2
             builder.Services.AddEndpointsApiExplorer();
 
             // Configure CORS
+            var allowedOriginsStr = builder.Configuration["Cors:AllowedOrigins"];
+            var allowedOrigins = !string.IsNullOrEmpty(allowedOriginsStr)
+                ? allowedOriginsStr.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                : new[] { "http://localhost:5173", "http://localhost:5174", "http://localhost:3000" };
+
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowFrontend", policy =>
                 {
-                    policy.WithOrigins("http://localhost:5173", "http://localhost:5174", "http://localhost:3000")
+                    policy.WithOrigins(allowedOrigins)
                           .AllowAnyHeader()
                           .AllowAnyMethod()
                           .AllowCredentials();
