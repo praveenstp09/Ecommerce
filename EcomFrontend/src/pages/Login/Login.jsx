@@ -116,10 +116,6 @@ const Login = () => {
             <span className={styles.lockIcon}>🔒</span> Secure login with encrypted OTP verification
           </p>
 
-       // <div> className={styles.demoBox}>
-         //   <p>Demo: Use any 10-digit number (e.g., 9876543210)</p>
-         //   <p>OTP: <strong>0000</strong></p>
-        //  </div>
 
           <div className={styles.features}>
             {[
