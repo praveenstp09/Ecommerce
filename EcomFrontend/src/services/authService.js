@@ -11,6 +11,31 @@ export const authService = {
     });
   },
 
+  async checkPhone(phone) {
+    const res = await fetch(`${API_BASE_URL}/Auth/check-phone?phone=${encodeURIComponent(phone)}`);
+    if (!res.ok) {
+      throw new Error('Failed to check user registration status.');
+    }
+    const data = await res.json();
+    return data; // { exists: true/false }
+  },
+
+  async register(name, email, phone) {
+    const res = await fetch(`${API_BASE_URL}/Auth/register`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ name, email, phone })
+    });
+
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.message || 'Registration failed.');
+    }
+    return await res.json();
+  },
+
   async verifyOTP(phone, otp) {
     const res = await fetch(`${API_BASE_URL}/Auth/verify-otp`, {
       method: 'POST',

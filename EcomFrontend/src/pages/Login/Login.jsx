@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, useAnimation } from 'framer-motion';
 import { useAuth } from '../../context/AuthContext';
 import { validators } from '../../utils/validators';
@@ -32,8 +32,19 @@ const AnimatedCounter = ({ from, to, duration = 2 }) => {
 const Login = () => {
   const [phone, setPhone] = useState('');
   const [error, setError] = useState('');
-  const { sendOTP, loading } = useAuth();
+  const [successMessage, setSuccessMessage] = useState('');
+  const { sendOTP, checkPhone, loading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.registerSuccess) {
+      setSuccessMessage('Registration successful! Please login to verify.');
+      if (location.state?.phone) {
+        setPhone(location.state.phone);
+      }
+    }
+  }, [location.state]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,10 +52,15 @@ const Login = () => {
     if (err) { setError(err); return; }
     setError('');
     try {
-      await sendOTP(phone);
-      navigate('/verify-otp', { state: { phone } });
+      const checkRes = await checkPhone(phone);
+      if (checkRes.exists) {
+        await sendOTP(phone);
+        navigate('/verify-otp', { state: { phone } });
+      } else {
+        navigate('/signup', { state: { phone } });
+      }
     } catch (ex) {
-      setError(ex.message || 'Failed to send OTP');
+      setError(ex.message || 'Verification failed');
     }
   };
 
@@ -80,13 +96,29 @@ const Login = () => {
       >
         {/* Logo */}
         <div className={styles.logoWrap}>
-          <h1 className={styles.brand}>Maison</h1>
+          <h1 className={styles.brand}>ECOMMERCE</h1>
           <p className={styles.tagline}>Curated for the discerning</p>
         </div>
 
         <div className={styles.content}>
           <h2 className={styles.title}>Welcome Back</h2>
           <p className={styles.subtitle}>Enter your mobile number to continue</p>
+
+          {successMessage && (
+            <div style={{
+              background: 'rgba(34, 197, 94, 0.1)',
+              border: '1px solid rgba(34, 197, 94, 0.2)',
+              color: '#22c55e',
+              padding: '0.75rem 1rem',
+              fontSize: '14px',
+              borderRadius: '2px',
+              marginBottom: '1.5rem',
+              textAlign: 'center',
+              fontWeight: '400'
+            }}>
+              {successMessage}
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className={styles.form}>
             <Input
@@ -96,7 +128,7 @@ const Login = () => {
               value={phone}
               onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
               error={error}
-              leftIcon='📱'
+              leftIcon=''
               maxLength={10}
               autoFocus
             />
@@ -116,10 +148,6 @@ const Login = () => {
             <span className={styles.lockIcon}>🔒</span> Secure login with encrypted OTP verification
           </p>
 
-          <div className={styles.demoBox}>
-            <p>Demo: Use any 10-digit number (e.g., 9876543210)</p>
-            <p>OTP: <strong>0000</strong></p>
-          </div>
 
           <div className={styles.features}>
             {[

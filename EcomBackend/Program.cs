@@ -12,6 +12,7 @@ namespace WebApplication2
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: true);
 
             // 1. DATABASE
             builder.Services.AddDbContext<AppDbContext>(options =>

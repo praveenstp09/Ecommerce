@@ -31,9 +31,9 @@ const Navbar = () => {
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = mobileOpen || searchOpen ? 'hidden' : '';
+    document.body.style.overflow = mobileOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
-  }, [mobileOpen, searchOpen]);
+  }, [mobileOpen]);
 
   useEffect(() => {
     const handleClick = (e) => {

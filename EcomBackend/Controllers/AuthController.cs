@@ -29,6 +29,51 @@ namespace WebApplication2.Controllers
             public string Otp { get; set; } = null!;
         }
 
+        public class RegisterDto
+        {
+            public string Phone { get; set; } = null!;
+            public string Name { get; set; } = null!;
+            public string Email { get; set; } = "";
+        }
+
+        [HttpGet("check-phone")]
+        public async Task<IActionResult> CheckPhone([FromQuery] string phone)
+        {
+            var exists = await _context.Users.AnyAsync(u => u.Phone == phone);
+            return Ok(new { Exists = exists });
+        }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterDto request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Phone) || string.IsNullOrWhiteSpace(request.Name))
+            {
+                return BadRequest(new { Message = "Phone and Name are required." });
+            }
+
+            var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Phone == request.Phone);
+            if (existingUser != null)
+            {
+                return BadRequest(new { Message = "User already exists." });
+            }
+
+            var user = new User
+            {
+                Phone = request.Phone,
+                Name = request.Name,
+                Email = request.Email ?? "",
+                Role = "customer"
+            };
+
+            // Automatically create an empty Cart for the new user!
+            user.Cart = new Cart { UserId = user.Id };
+
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { Message = "Registration successful" });
+        }
+
         [HttpPost("verify-otp")]
         public async Task<IActionResult> VerifyOtp([FromBody] LoginDto request)
         {
@@ -41,21 +86,10 @@ namespace WebApplication2.Controllers
             // 2. Look for the user in the database
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Phone == request.Phone);
 
-            // 3. If user doesn't exist, create them immediately
+            // 3. If user doesn't exist, require registration
             if (user == null)
             {
-                user = new User
-                {
-                    Phone = request.Phone,
-                    Name = "New User", // Default value since your model requires a Name
-                    Role = "customer"
-                };
-
-                // Pro-Tip: Automatically create an empty Cart for the new user!
-                user.Cart = new Cart { UserId = user.Id };
-
-                _context.Users.Add(user);
-                await _context.SaveChangesAsync();
+                return NotFound(new { Message = "User not registered. Please sign up first." });
             }
 
             // 4. Generate the JWT Token

@@ -13,6 +13,7 @@ import OrderSuccess from '../pages/OrderSuccess/OrderSuccess';
 import Orders from '../pages/Orders/Orders';
 import Profile from '../pages/Profile/Profile';
 import Login from '../pages/Login/Login';
+import SignUp from '../pages/SignUp/SignUp';
 import OTPVerification from '../pages/OTPVerification/OTPVerification';
 import NotFound from '../pages/NotFound/NotFound';
 
@@ -23,6 +24,11 @@ const AppRoutes = () => (
       <Route path='/login' element={
         <PublicRoute>
           <Login />
+        </PublicRoute>
+      } />
+      <Route path='/signup' element={
+        <PublicRoute>
+          <SignUp />
         </PublicRoute>
       } />
       <Route path='/verify-otp' element={

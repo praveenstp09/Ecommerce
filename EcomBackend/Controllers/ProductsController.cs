@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication2.Data;
 using WebApplication2.Models;
@@ -19,10 +19,22 @@ namespace WebApplication2.Controllers
 
         // GET: api/products
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<Product>>> GetProducts([FromQuery] string? search = null)
         {
-            // Fetches all products from your Somee database
-            var products = await _context.Products.ToListAsync();
+            IQueryable<Product> query = _context.Products;
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                var lowerSearch = search.ToLower();
+                query = query.Where(p => 
+                    p.Name.ToLower().Contains(lowerSearch) || 
+                    p.Brand.ToLower().Contains(lowerSearch) || 
+                    p.Description.ToLower().Contains(lowerSearch) ||
+                    p.TagsJson.ToLower().Contains(lowerSearch)
+                );
+            }
+
+            var products = await query.ToListAsync();
             return Ok(products);
         }
 

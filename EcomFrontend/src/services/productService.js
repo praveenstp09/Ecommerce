@@ -4,6 +4,49 @@ import { authService } from './authService';
 
 let cachedProducts = null;
 
+function mapProduct(p) {
+  let images = [];
+  try { images = JSON.parse(p.imagesJson || '[]'); } catch { images = [p.imageUrl || 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=400&q=80']; }
+  if (!images || images.length === 0) {
+    images = [p.imageUrl || 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=400&q=80'];
+  }
+
+  let specifications = {};
+  try { specifications = JSON.parse(p.specificationsJson || '{}'); } catch {}
+
+  let features = [];
+  try { features = JSON.parse(p.featuresJson || '[]'); } catch {}
+
+  let tags = [];
+  try { tags = JSON.parse(p.tagsJson || '[]'); } catch {}
+
+  const discountVal = p.discount || 0;
+  const calcOriginalPrice = discountVal > 0 ? Math.round(p.price / (1 - discountVal / 100)) : p.price;
+
+  return {
+    id: p.id,
+    name: p.name,
+    description: p.description,
+    price: p.price,
+    originalPrice: calcOriginalPrice,
+    discount: discountVal,
+    rating: p.rating || 4.5,
+    reviewCount: p.reviewCount || 100,
+    stock: p.stockQuantity,
+    brand: p.brand,
+    category: p.category,
+    subcategory: p.subcategory,
+    badge: p.badge || null,
+    freeShipping: p.freeShipping,
+    trending: p.trending,
+    featured: p.featured,
+    images,
+    specifications,
+    features,
+    tags
+  };
+}
+
 async function getProducts() {
   if (cachedProducts) return cachedProducts;
 
@@ -14,64 +57,37 @@ async function getProducts() {
   if (!res.ok) throw new Error('Failed to fetch products');
 
   const dbProducts = await res.json();
-  cachedProducts = dbProducts.map(p => {
-    // Parse JSON strings
-    let images = [];
-    try { images = JSON.parse(p.imagesJson || '[]'); } catch { images = [p.imageUrl || 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=400&q=80']; }
-    if (!images || images.length === 0) {
-      images = [p.imageUrl || 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=400&q=80'];
-    }
-
-    let specifications = {};
-    try { specifications = JSON.parse(p.specificationsJson || '{}'); } catch {}
-
-    let features = [];
-    try { features = JSON.parse(p.featuresJson || '[]'); } catch {}
-
-    let tags = [];
-    try { tags = JSON.parse(p.tagsJson || '[]'); } catch {}
-
-    const discountVal = p.discount || 0;
-    const calcOriginalPrice = discountVal > 0 ? Math.round(p.price / (1 - discountVal / 100)) : p.price;
-
-    return {
-      id: p.id,
-      name: p.name,
-      description: p.description,
-      price: p.price,
-      originalPrice: calcOriginalPrice,
-      discount: discountVal,
-      rating: p.rating || 4.5,
-      reviewCount: p.reviewCount || 100,
-      stock: p.stockQuantity,
-      brand: p.brand,
-      category: p.category,
-      subcategory: p.subcategory,
-      badge: p.badge || null,
-      freeShipping: p.freeShipping,
-      trending: p.trending,
-      featured: p.featured,
-      images,
-      specifications,
-      features,
-      tags
-    };
-  });
+  cachedProducts = dbProducts.map(mapProduct);
 
   return cachedProducts;
 }
 
+async function fetchProductsFromApi(searchQuery) {
+  const url = searchQuery 
+    ? `${API_BASE_URL}/products?search=${encodeURIComponent(searchQuery)}`
+    : `${API_BASE_URL}/products`;
+
+  const res = await fetch(url, {
+    headers: { ...authService.getAuthHeader() },
+    credentials: 'include'
+  });
+  if (!res.ok) throw new Error('Failed to fetch products');
+
+  const dbProducts = await res.json();
+  return dbProducts.map(mapProduct);
+}
+
 export const productService = {
   async getAllProducts(filters = {}, sort = 'relevance') {
-    const products = await getProducts();
-    let result = filterProducts(products, filters);
+    let products;
     if (filters.query) {
-      result = result.filter(p =>
-        p.name.toLowerCase().includes(filters.query.toLowerCase()) ||
-        p.brand.toLowerCase().includes(filters.query.toLowerCase()) ||
-        p.tags.some(t => t.toLowerCase().includes(filters.query.toLowerCase()))
-      );
+      // Fetch directly from API when search is active
+      products = await fetchProductsFromApi(filters.query);
+    } else {
+      // Fallback to client-side cache for regular browsing
+      products = await getProducts();
     }
+    let result = filterProducts(products, filters);
     return sortProducts(result, sort);
   },
 
@@ -101,14 +117,8 @@ export const productService = {
   },
 
   async search(query) {
-    const products = await getProducts();
-    const q = query.toLowerCase();
-    return products.filter(p =>
-      p.name.toLowerCase().includes(q) ||
-      p.brand.toLowerCase().includes(q) ||
-      p.category.toLowerCase().includes(q) ||
-      p.tags.some(t => t.toLowerCase().includes(q))
-    );
+    // Perform search directly against the database API
+    return await fetchProductsFromApi(query);
   },
 
   async getRelated(productId, category) {

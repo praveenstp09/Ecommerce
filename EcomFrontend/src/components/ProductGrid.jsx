@@ -7,7 +7,9 @@ import styles from './ProductGrid.module.css';
 const ProductGrid = ({ products, loading = false, emptyMessage = 'No products found' }) => {
   const [view, setView] = useState('grid');
 
-  if (loading) {
+  const isInitialLoad = loading && (!products || products.length === 0);
+
+  if (isInitialLoad) {
     return (
       <div className={styles.grid}>
         {Array.from({ length: 8 }, (_, i) => <ProductCardSkeleton key={i} />)}
@@ -43,6 +45,7 @@ const ProductGrid = ({ products, loading = false, emptyMessage = 'No products fo
 
       <motion.div
         className={view === 'grid' ? styles.grid : styles.list}
+        style={{ opacity: loading ? 0.6 : 1, transition: 'opacity 0.2s ease' }}
         layout
       >
         <AnimatePresence>

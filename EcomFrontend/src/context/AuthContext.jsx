@@ -43,6 +43,34 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
+  const checkPhone = useCallback(async (phone) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await authService.checkPhone(phone);
+      return result;
+    } catch (err) {
+      setError(err.message);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const register = useCallback(async (name, email, phone) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await authService.register(name, email, phone);
+      return result;
+    } catch (err) {
+      setError(err.message);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   const verifyOTP = useCallback(async (phone, otp) => {
     setLoading(true);
     setError(null);
@@ -111,6 +139,8 @@ export const AuthProvider = ({ children }) => {
     loading,
     error,
     sendOTP,
+    checkPhone,
+    register,
     verifyOTP,
     logout,
     updateUser,

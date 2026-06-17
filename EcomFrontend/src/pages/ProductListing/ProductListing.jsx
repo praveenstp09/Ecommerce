@@ -1,11 +1,10 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { productService } from '../../services/productService';
 import { categories } from '../../data/categories';
 import { SORT_OPTIONS, PRICE_RANGES, PRODUCTS_PER_PAGE } from '../../utils/constants';
 import ProductGrid from '../../components/ProductGrid';
-import Pagination from '../../components/common/Pagination/Pagination';
 import { SlideUp } from "../../components/animations/SlideUp";
 import { filterProducts, sortProducts } from '../../utils/helpers';
 import styles from './ProductListing.module.css';
@@ -203,17 +202,35 @@ const ProductListing = () => {
     };
   }, [activeFilters, sortParam]);
 
-  // Paginated list
+  // Infinite scroll displayed products
   const totalPages = Math.ceil(filteredProductsList.length / PRODUCTS_PER_PAGE);
-  const paginatedProducts = useMemo(() => {
-    const startIdx = (currentPage - 1) * PRODUCTS_PER_PAGE;
-    return filteredProductsList.slice(startIdx, startIdx + PRODUCTS_PER_PAGE);
+  const displayedProducts = useMemo(() => {
+    return filteredProductsList.slice(0, currentPage * PRODUCTS_PER_PAGE);
   }, [filteredProductsList, currentPage]);
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const observerRef = useRef(null);
+
+  const handleObserver = useCallback((entries) => {
+    const [target] = entries;
+    if (target.isIntersecting && currentPage < totalPages && !loading) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  }, [currentPage, totalPages, loading]);
+
+  useEffect(() => {
+    const option = {
+      root: null,
+      rootMargin: '200px',
+      threshold: 0
+    };
+    const observer = new IntersectionObserver(handleObserver, option);
+    const currentTarget = observerRef.current;
+    if (currentTarget) observer.observe(currentTarget);
+
+    return () => {
+      if (currentTarget) observer.unobserve(currentTarget);
+    };
+  }, [handleObserver]);
 
   const currentCategoryObj = categories.find((c) => c.id === categoryParam);
 
@@ -407,14 +424,15 @@ const ProductListing = () => {
 
         {/* ── Main Products Grid Content ── */}
         <main className={styles.mainContent}>
-          <ProductGrid products={paginatedProducts} loading={loading} emptyMessage="No products match your filters. Try adjusting them." />
+          <ProductGrid products={displayedProducts} loading={loading} emptyMessage="No products match your filters. Try adjusting them." />
 
-          {!loading && (
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-            />
+          {/* Sentinel element for Infinite Scroll */}
+          <div ref={observerRef} style={{ height: '20px', margin: '20px 0' }} />
+
+          {loading && currentPage > 1 && (
+            <div style={{ textAlign: 'center', padding: '1rem', color: 'var(--color-text-secondary)' }}>
+              Loading more products...
+            </div>
           )}
         </main>
       </div>

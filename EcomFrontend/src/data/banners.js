@@ -3,7 +3,7 @@ export const heroBanners = [
     id: 1,
     title: 'Find Yourself Here',
     subtitle: 'Curated for the discerning',
-    description: 'Maison is an ode to discovery — a love letter to life lived beautifully. Explore our handpicked collection of premium goods.',
+    description: 'Ecommerce is an ode to discovery — a love letter to life lived beautifully. Explore our handpicked collection of premium goods.',
     cta: 'Shop Collection',
     ctaLink: '/products',
     badge: 'Our Story',

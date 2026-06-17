@@ -28,7 +28,7 @@ const Footer = () => {
         <div className={styles.topSection}>
           <div className={styles.brand}>
             <Link to='/' className={styles.logo}>
-              Maison
+              Ecommerce
             </Link>
             <p className={styles.tagline}>
               An ode to discovery — a curated collection for life lived beautifully.
@@ -64,7 +64,7 @@ const Footer = () => {
 
         <div className={styles.socialSection}>
           <p className={styles.socialTitle}>Connect with us</p>
-          <p className={styles.socialSubtitle}>Inspired by you, always — #MaisonCollective</p>
+          <p className={styles.socialSubtitle}>Inspired by you, always — #EcommerceCollective</p>
           <div className={styles.socials}>
             {['Instagram', 'Twitter', 'Facebook', 'Pinterest'].map(s => (
               <motion.a
@@ -81,18 +81,6 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className={styles.bottom}>
-        <div className={styles.bottomInner}>
-          <p className={styles.copyright}>
-            &copy; Copyright {currentYear} Maison Collective. All rights reserved.
-          </p>
-          <div className={styles.payments}>
-            {['UPI', 'Visa', 'Mastercard', 'AmEx', 'PayTM'].map(p => (
-              <span key={p} className={styles.paymentBadge}>{p}</span>
-            ))}
-          </div>
-        </div>
-      </div>
 
       {/* Back to Top */}
       <motion.button
