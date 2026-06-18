@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication2.Data;
@@ -54,6 +55,7 @@ namespace WebApplication2.Controllers
 
         // POST: api/products
         [HttpPost]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult<Product>> CreateProduct(Product product)
         {
             // Ensure a new ID is generated
@@ -67,6 +69,22 @@ namespace WebApplication2.Controllers
 
             // Return a 201 Created response
             return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
+        }
+
+        // DELETE: api/products/{id}
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> DeleteProduct(string id)
+        {
+            var product = await _context.Products.FindAsync(id);
+            if (product == null)
+            {
+                return NotFound("Product not found.");
+            }
+
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+            return Ok(new { Message = "Product deleted successfully." });
         }
     }
 }

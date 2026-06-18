@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import ProtectedRoute from './ProtectedRoute';
+import AdminRoute from './AdminRoute';
 import PublicRoute from './PublicRoute';
 import Layout from '../components/layout/Layout';
 
@@ -15,6 +16,7 @@ import Profile from '../pages/Profile/Profile';
 import Login from '../pages/Login/Login';
 import SignUp from '../pages/SignUp/SignUp';
 import OTPVerification from '../pages/OTPVerification/OTPVerification';
+import AdminDashboard from '../pages/AdminDashboard/AdminDashboard';
 import NotFound from '../pages/NotFound/NotFound';
 
 const AppRoutes = () => (
@@ -77,6 +79,11 @@ const AppRoutes = () => (
         <ProtectedRoute>
           <Layout><Profile /></Layout>
         </ProtectedRoute>
+      } />
+      <Route path='/admin' element={
+        <AdminRoute>
+          <Layout><AdminDashboard /></Layout>
+        </AdminRoute>
       } />
       <Route path='*' element={<Layout><NotFound /></Layout>} />
     </Routes>

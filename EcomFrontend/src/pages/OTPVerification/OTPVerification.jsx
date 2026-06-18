@@ -104,10 +104,6 @@ const OTPVerification = () => {
           <strong>+91 {phone}</strong>
         </p>
 
-        <div className={styles.demoHint}>
-          🔐 Demo OTP: <strong>0000</strong>
-        </div>
-
         <form onSubmit={handleSubmit}>
           <div className={styles.otpRow} onPaste={handlePaste}>
             {otp.map((digit, i) => (

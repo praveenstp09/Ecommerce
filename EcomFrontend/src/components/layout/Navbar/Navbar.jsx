@@ -216,6 +216,14 @@ const Navbar = () => {
                         My Profile
                       </Link>
                       <div className={styles.dropdownDivider} />
+                      {user?.role === 'admin' && (
+                        <>
+                          <Link to='/admin' className={styles.dropdownItem} onClick={() => setProfileOpen(false)} style={{ color: 'var(--color-primary)', fontWeight: 'var(--font-medium)' }}>
+                            🛡️ Admin Panel
+                          </Link>
+                          <div className={styles.dropdownDivider} />
+                        </>
+                      )}
                       <button className={`${styles.dropdownItem} ${styles.logoutBtn}`} onClick={handleLogout}>
                         Logout
                       </button>

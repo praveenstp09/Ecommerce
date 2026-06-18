@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication2.Data;
@@ -7,7 +8,7 @@ namespace WebApplication2.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    // [Authorize] <-- Remember to uncomment this when you turn security back on!
+    [Authorize]
     public class OrdersController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -15,6 +16,64 @@ namespace WebApplication2.Controllers
         public OrdersController(AppDbContext context)
         {
             _context = context;
+        }
+
+        // GET: api/orders
+        [HttpGet]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> GetAllOrders()
+        {
+            var orders = await _context.Orders
+                .Include(o => o.Items)
+                .ThenInclude(i => i.Product)
+                .OrderByDescending(o => o.OrderDate)
+                .ToListAsync();
+
+            var orderDetails = orders.Select(o => new
+            {
+                o.Id,
+                o.UserId,
+                o.ShippingAddress,
+                o.OrderDate,
+                OrderStatus = o.OrderStatus,
+                PaymentStatus = o.PaymentStatus,
+                o.TotalAmount,
+                Items = o.Items.Select(i => new
+                {
+                    i.ProductId,
+                    i.Product.Name,
+                    i.Product.ImageUrl,
+                    i.Quantity,
+                    i.UnitPrice,
+                    SubTotal = i.Quantity * i.UnitPrice
+                })
+            });
+
+            return Ok(orderDetails);
+        }
+
+        public class UpdateStatusDto
+        {
+            public string OrderStatus { get; set; } = null!;
+            public string PaymentStatus { get; set; } = null!;
+        }
+
+        // PUT: api/orders/{id}/status
+        [HttpPut("{id}/status")]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> UpdateOrderStatus(string id, [FromBody] UpdateStatusDto dto)
+        {
+            var order = await _context.Orders.FindAsync(id);
+            if (order == null)
+            {
+                return NotFound("Order not found.");
+            }
+
+            order.OrderStatus = dto.OrderStatus;
+            order.PaymentStatus = dto.PaymentStatus;
+
+            await _context.SaveChangesAsync();
+            return Ok(order);
         }
 
         // Temporary DTO for testing without a token

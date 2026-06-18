@@ -19,6 +19,15 @@ namespace WebApplication2.Controllers
             _context = context;
         }
 
+        // GET: api/users
+        [HttpGet]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var users = await _context.Users.ToListAsync();
+            return Ok(users);
+        }
+
         // GET: api/users/profile
         [HttpGet("profile")]
         public async Task<IActionResult> GetProfile()

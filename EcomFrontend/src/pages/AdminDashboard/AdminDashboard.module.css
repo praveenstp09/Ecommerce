@@ -1,0 +1,351 @@
+.wrapper {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+  min-height: 80vh;
+}
+
+.header {
+  margin-bottom: 3rem;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: var(--font-medium);
+  color: var(--color-text-primary);
+  margin: 0 0 0.5rem;
+}
+
+.subtitle {
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  margin: 0;
+  font-weight: var(--font-light);
+}
+
+/* ── Tabs (Horizontal layout restored) ── */
+.tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+  border-bottom: 1px solid var(--color-border-light);
+  padding-bottom: 1rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Custom scrollbar for horizontal tabs menu */
+.tabs::-webkit-scrollbar {
+  height: 4px;
+}
+.tabs::-webkit-scrollbar-thumb {
+  background: var(--color-border-light);
+}
+
+.tabBtn {
+  background: none;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.tabBtn:hover {
+  color: var(--color-text-primary);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.activeTab {
+  color: var(--color-text-primary);
+  background: var(--color-bg-secondary);
+  font-weight: var(--font-medium);
+  border: 1px solid var(--color-border);
+}
+
+.tabBadge {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  font-size: 10px;
+  padding: 0.15rem 0.4rem;
+  border-radius: 10px;
+  font-weight: var(--font-bold);
+  box-shadow: var(--shadow-glow-teal);
+}
+
+/* ── Panel Content ── */
+.panel {
+  min-height: 400px;
+  position: relative;
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+}
+
+.error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  padding: 1rem;
+  font-size: var(--text-sm);
+  border-radius: 2px;
+  margin-bottom: 2rem;
+}
+
+.empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+  font-style: italic;
+}
+
+/* ── Table Card ── */
+.tableCard {
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.responsiveTable {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: var(--text-sm);
+}
+
+.table th {
+  background: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-medium);
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: var(--tracking-wider);
+  padding: 1.15rem 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.table td {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--color-border-light);
+  color: var(--color-text-secondary);
+  vertical-align: middle;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.table tr:hover td {
+  background: rgba(255, 255, 255, 0.01);
+}
+
+.monoId {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  opacity: 0.8;
+}
+
+.boldText {
+  color: var(--color-text-primary);
+  font-weight: var(--font-medium);
+}
+
+.priceCell {
+  color: var(--color-text-primary);
+  font-weight: var(--font-semibold);
+  font-family: var(--font-mono);
+}
+
+.outOfStock {
+  color: #ef4444;
+  font-weight: var(--font-medium);
+}
+
+.badge {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  padding: 0.15rem 0.5rem;
+  border-radius: 20px;
+  font-size: var(--text-xs);
+  text-transform: capitalize;
+}
+
+.role {
+  padding: 0.25rem 0.5rem;
+  border-radius: 2px;
+  font-size: 10px;
+  text-transform: uppercase;
+  font-weight: var(--font-bold);
+  letter-spacing: 0.05em;
+}
+
+.adminRole {
+  background: rgba(99, 102, 241, 0.1);
+  color: #6366f1;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.customerRole {
+  background: rgba(148, 163, 184, 0.1);
+  color: var(--color-text-muted);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+/* ── Interactive Selects ── */
+.select {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  padding: 0.4rem 0.75rem;
+  border-radius: 2px;
+  outline: none;
+  font-size: var(--text-xs);
+  cursor: pointer;
+  width: 100%;
+  max-width: 130px;
+}
+
+.select:focus {
+  border-color: var(--color-primary);
+}
+
+/* ── Products Specifics (Spacious Layout preserved) ── */
+.productsPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.panelAction {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Custom styles to make product list catalog "little large" */
+.productTable td {
+  padding: 1.75rem 1.5rem; /* Larger padding for catalog list */
+}
+
+.productThumbnail {
+  width: 72px; /* Increased from 40px */
+  height: 72px; /* Increased from 40px */
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease;
+}
+
+.productThumbnail:hover {
+  transform: scale(1.05);
+}
+
+.productMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.productName {
+  font-size: var(--text-base); /* Larger font size */
+  font-weight: var(--font-medium);
+  color: var(--color-text-primary);
+}
+
+.productBrand {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: var(--font-normal);
+}
+
+.productCategory {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  background: rgba(255, 255, 255, 0.02);
+  padding: 0.35rem 0.65rem;
+  border-radius: 4px;
+  border: 1px solid var(--color-border-light);
+}
+
+.productBadge {
+  display: inline-block;
+  align-self: flex-start;
+  background: rgba(20, 184, 166, 0.1);
+  color: #14b8a6;
+  border: 1px solid rgba(20, 184, 166, 0.2);
+  padding: 0.15rem 0.5rem;
+  border-radius: 20px;
+  font-size: 10px;
+  text-transform: uppercase;
+  font-weight: var(--font-bold);
+  letter-spacing: 0.02em;
+}
+
+/* ── Delete Button Outline red ── */
+.deleteBtn {
+  background: rgba(239, 68, 68, 0.06);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: var(--text-xs);
+  font-weight: var(--font-medium);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.deleteBtn:hover {
+  background: rgba(239, 68, 68, 0.18);
+  border-color: rgba(239, 68, 68, 0.4);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15);
+}
+
+.deleteBtn:active {
+  transform: translateY(0);
+}
+
+/* ── Order Columns ── */
+.orderItemsCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.orderItemRow {
+  font-size: var(--text-xs);
+  white-space: nowrap;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .wrapper {
+    padding-top: 5rem;
+  }
+}

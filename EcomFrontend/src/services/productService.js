@@ -91,6 +91,26 @@ export const productService = {
     return sortProducts(result, sort);
   },
 
+  async createProduct(product) {
+    const res = await fetch(`${API_BASE_URL}/products`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...authService.getAuthHeader()
+      },
+      body: JSON.stringify(product),
+      credentials: 'include'
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || 'Failed to create product.');
+    }
+
+    cachedProducts = null; // Reset cache to force reload
+    return await res.json();
+  },
+
   async getProductById(id) {
     const products = await getProducts();
     return products.find(p => p.id.toString() === id.toString()) || null;
@@ -135,5 +155,23 @@ export const productService = {
     const products = await getProducts();
     const filtered = categoryId ? products.filter(p => p.category === categoryId) : products;
     return [...new Set(filtered.map(p => p.brand))].sort();
+  },
+
+  async deleteProduct(id) {
+    const res = await fetch(`${API_BASE_URL}/products/${id}`, {
+      method: 'DELETE',
+      headers: {
+        ...authService.getAuthHeader()
+      },
+      credentials: 'include'
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || 'Failed to delete product.');
+    }
+
+    cachedProducts = null; // Reset cache to force reload
+    return true;
   },
 };
