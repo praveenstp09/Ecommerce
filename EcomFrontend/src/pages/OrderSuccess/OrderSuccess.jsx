@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { orderService } from '../../services/orderService';
 import { formatPrice } from '../../utils/formatCurrency';
 import { SlideUp } from "../../components/animations/SlideUp";
+import Loader from '../../components/common/Loader/Loader';
 import styles from './OrderSuccess.module.css';
 
 const OrderSuccess = () => {
@@ -11,18 +12,67 @@ const OrderSuccess = () => {
   const navigate = useNavigate();
   const orderId = searchParams.get('id');
 
-  const [order] = useState(() => {
-    if (!orderId) return null;
-    return orderService.getOrderById(orderId);
-  });
+  const [order, setOrder] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!order) {
-      navigate('/');
-    }
-  }, [order, navigate]);
+    let active = true;
+    const fetchOrder = async () => {
+      if (!orderId) {
+        navigate('/');
+        return;
+      }
+      try {
+        const data = await orderService.getOrderById(orderId);
+        if (active) {
+          if (!data) {
+            navigate('/');
+          } else {
+            setOrder(data);
+          }
+          setLoading(false);
+        }
+      } catch (err) {
+        console.error(err);
+        if (active) {
+          navigate('/');
+        }
+      }
+    };
+
+    fetchOrder();
+    return () => { active = false; };
+  }, [orderId, navigate]);
+
+  if (loading) {
+    return (
+      <div className={styles.loadingWrapper}>
+        <Loader size="lg" />
+        <p>Loading order details...</p>
+      </div>
+    );
+  }
 
   if (!order) return null;
+
+  const renderAddress = (address) => {
+    if (!address) return 'N/A';
+    if (typeof address === 'string') {
+      return address.split(', ').map((line, idx) => (
+        <span key={idx}>
+          {line}
+          {idx < address.split(', ').length - 1 && <br />}
+        </span>
+      ));
+    }
+    return (
+      <>
+        {address.name} <br />
+        {address.line1}, {address.line2 && `${address.line2}, `}
+        {address.city}, {address.state} — {address.pincode}
+      </>
+    );
+  };
 
   return (
     <div className={`${styles.successWrapper} container`}>
@@ -59,7 +109,7 @@ const OrderSuccess = () => {
           </p>
         </SlideUp>
 
-        {/* Order Details Details */}
+        {/* Order Details */}
         <div className={styles.detailsBox}>
           <div className={styles.detailRow}>
             <span>Order ID</span>
@@ -72,9 +122,7 @@ const OrderSuccess = () => {
           <div className={styles.detailRow}>
             <span>Delivery Address</span>
             <span className={styles.address}>
-              {order.address.name} <br />
-              {order.address.line1}, {order.address.line2 && `${order.address.line2}, `}
-              {order.address.city}, {order.address.state} — {order.address.pincode}
+              {renderAddress(order.address)}
             </span>
           </div>
           <div className={styles.divider}></div>
