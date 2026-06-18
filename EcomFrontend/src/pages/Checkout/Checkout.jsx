@@ -1,11 +1,9 @@
-import { useState,useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { orderService } from '../../services/orderService';
 import { formatPrice } from '../../utils/formatCurrency';
-// import { PAYMENT_METHODS } from '../../utils/constants';
 import { validators, validateForm } from '../../utils/validators';
 import Loader from '../../components/common/Loader/Loader';
 import { SlideUp } from '../../components/animations/SlideUp';
@@ -37,8 +35,6 @@ const Checkout = () => {
   });
 
   const [addressErrors, setAddressErrors] = useState({});
-
-  // Checkout Status
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Handle Input Changes
@@ -49,36 +45,6 @@ const Checkout = () => {
       setAddressErrors((prev) => ({ ...prev, [name]: null }));
     }
   };
-
-  /*
-  // Commented out payment handlers from screenshots
-  const handleCardChange = (e) => {
-    const { name, value } = e.target;
-    let val = value;
-    if (name === 'cardNumber') {
-      val = value.replace(/\D/g, '').substring(0, 16);
-      val = val.replace(/(\d{4})(?=\d)/g, '$1 ');
-    } else if (name === 'cardExpiry') {
-      val = value.replace(/\D/g, '').substring(0, 4);
-      if (val.length >= 2) {
-        val = val.substring(0, 2) + '/' + val.substring(2);
-      }
-    } else if (name === 'cvv') {
-      val = value.replace(/\D/g, '').substring(0, 4);
-    }
-    setCardDetails((prev) => ({ ...prev, [name]: val }));
-    if (paymentErrors[name]) {
-      setPaymentErrors((prev) => ({ ...prev, [name]: null }));
-    }
-  };
-
-  const handleUpiChange = (e) => {
-    setUpiId(e.target.value);
-    if (paymentErrors.upi) {
-      setPaymentErrors((prev) => ({ ...prev, upi: null }));
-    }
-  };
-  */
 
   // Submission validation
   const handleSubmit = async (e) => {
@@ -132,8 +98,9 @@ const Checkout = () => {
 
   const handlePayment = (orderData, finalAddress) => {
     const options = {
-      key: "rzp_test_TOfj0KQyTHNu8h",
-      amount: Math.round(totals.total * 100),
+      // NOTE: Replace this placeholder key with your active Razorpay Test Key ID
+      key: "rzp_test_T2yO5Vf8s6BQxX", 
+      amount: Math.round(totals.total * 100), // Amount in paise
       currency: "INR",
       name: "Ecommerce",
       description: "Order Payment",
@@ -180,8 +147,6 @@ const Checkout = () => {
     rzp.open();
   };
 
-
-
   return (
     <div className={`${styles.checkoutWrapper} container`}>
       {isSubmitting && (
@@ -201,7 +166,7 @@ const Checkout = () => {
       <form onSubmit={handleSubmit} className={styles.layout}>
         {/* Left Column: Form Details */}
         <div className={styles.detailsColumn}>
-          {/* Step 1: Shipping Address */}
+          {/* Shipping Address */}
           <div className={styles.sectionCard}>
             <div className={styles.sectionHeader}>
               <span className={styles.stepNum}>1</span>
@@ -260,125 +225,115 @@ const Checkout = () => {
             </label>
 
             {/* New Address Input Fields */}
-            <AnimatePresence>
-              {selectedAddressId === 'new' && (
-                <motion.div
-                  className={styles.addressFormFields}
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <div className={styles.formGrid}>
-                    <div className={styles.formGroup}>
-                      <label htmlFor="name-input">Full Name</label>
-                      <input
-                        id="name-input"
-                        type="text"
-                        name="name"
-                        value={newAddress.name}
-                        onChange={handleAddressChange}
-                        className={addressErrors.name ? styles.inputError : ''}
-                      />
-                      {addressErrors.name && (
-                        <span className={styles.errorText}>{addressErrors.name}</span>
-                      )}
-                    </div>
-
-                    <div className={styles.formGroup}>
-                      <label htmlFor="phone-input">Phone Number</label>
-                      <input
-                        id="phone-input"
-                        type="tel"
-                        name="phone"
-                        value={newAddress.phone}
-                        onChange={handleAddressChange}
-                        className={addressErrors.phone ? styles.inputError : ''}
-                      />
-                      {addressErrors.phone && (
-                        <span className={styles.errorText}>{addressErrors.phone}</span>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className={`${styles.formGroup} ${styles.fullWidth}`}>
-                    <label htmlFor="line1-input">Flat, House no., Building, Street</label>
+            {selectedAddressId === 'new' && (
+              <div className={styles.addressFormFields}>
+                <div className={styles.formGrid}>
+                  <div className={styles.formGroup}>
+                    <label htmlFor="name-input">Full Name</label>
                     <input
-                      id="line1-input"
+                      id="name-input"
                       type="text"
-                      name="line1"
-                      value={newAddress.line1}
+                      name="name"
+                      value={newAddress.name}
                       onChange={handleAddressChange}
-                      className={addressErrors.line1 ? styles.inputError : ''}
+                      className={addressErrors.name ? styles.inputError : ''}
                     />
-                    {addressErrors.line1 && (
-                      <span className={styles.errorText}>{addressErrors.line1}</span>
+                    {addressErrors.name && (
+                      <span className={styles.errorText}>{addressErrors.name}</span>
                     )}
                   </div>
 
-                  <div className={`${styles.formGroup} ${styles.fullWidth}`}>
-                    <label htmlFor="line2-input">Area, Colony, Road, Sector, Landmark (Optional)</label>
+                  <div className={styles.formGroup}>
+                    <label htmlFor="phone-input">Phone Number</label>
                     <input
-                      id="line2-input"
-                      type="text"
-                      name="line2"
-                      value={newAddress.line2}
+                      id="phone-input"
+                      type="tel"
+                      name="phone"
+                      value={newAddress.phone}
                       onChange={handleAddressChange}
+                      className={addressErrors.phone ? styles.inputError : ''}
                     />
+                    {addressErrors.phone && (
+                      <span className={styles.errorText}>{addressErrors.phone}</span>
+                    )}
+                  </div>
+                </div>
+
+                <div className={`${styles.formGroup} ${styles.fullWidth}`}>
+                  <label htmlFor="line1-input">Flat, House no., Building, Street</label>
+                  <input
+                    id="line1-input"
+                    type="text"
+                    name="line1"
+                    value={newAddress.line1}
+                    onChange={handleAddressChange}
+                    className={addressErrors.line1 ? styles.inputError : ''}
+                  />
+                  {addressErrors.line1 && (
+                    <span className={styles.errorText}>{addressErrors.line1}</span>
+                  )}
+                </div>
+
+                <div className={`${styles.formGroup} ${styles.fullWidth}`}>
+                  <label htmlFor="line2-input">Area, Colony, Road, Sector, Landmark (Optional)</label>
+                  <input
+                    id="line2-input"
+                    type="text"
+                    name="line2"
+                    value={newAddress.line2}
+                    onChange={handleAddressChange}
+                  />
+                </div>
+
+                <div className={styles.formGrid}>
+                  <div className={styles.formGroup}>
+                    <label htmlFor="city-input">City</label>
+                    <input
+                      id="city-input"
+                      type="text"
+                      name="city"
+                      value={newAddress.city}
+                      onChange={handleAddressChange}
+                      className={addressErrors.city ? styles.inputError : ''}
+                    />
+                    {addressErrors.city && (
+                      <span className={styles.errorText}>{addressErrors.city}</span>
+                    )}
                   </div>
 
-                  <div className={styles.formGrid}>
-                    <div className={styles.formGroup}>
-                      <label htmlFor="city-input">City</label>
-                      <input
-                        id="city-input"
-                        type="text"
-                        name="city"
-                        value={newAddress.city}
-                        onChange={handleAddressChange}
-                        className={addressErrors.city ? styles.inputError : ''}
-                      />
-                      {addressErrors.city && (
-                        <span className={styles.errorText}>{addressErrors.city}</span>
-                      )}
-                    </div>
-
-                    <div className={styles.formGroup}>
-                      <label htmlFor="state-input">State</label>
-                      <input
-                        id="state-input"
-                        type="text"
-                        name="state"
-                        value={newAddress.state}
-                        onChange={handleAddressChange}
-                        className={addressErrors.state ? styles.inputError : ''}
-                      />
-                      {addressErrors.state && (
-                        <span className={styles.errorText}>{addressErrors.state}</span>
-                      )}
-                    </div>
-
-                    <div className={styles.formGroup}>
-                      <label htmlFor="pincode-input">Pincode (6-digit)</label>
-                      <input
-                        id="pincode-input"
-                        type="text"
-                        name="pincode"
-                        value={newAddress.pincode}
-                        onChange={handleAddressChange}
-                        className={addressErrors.pincode ? styles.inputError : ''}
-                      />
-                      {addressErrors.pincode && (
-                        <span className={styles.errorText}>{addressErrors.pincode}</span>
-                      )}
-                    </div>
+                  <div className={styles.formGroup}>
+                    <label htmlFor="state-input">State</label>
+                    <input
+                      id="state-input"
+                      type="text"
+                      name="state"
+                      value={newAddress.state}
+                      onChange={handleAddressChange}
+                      className={addressErrors.state ? styles.inputError : ''}
+                    />
+                    {addressErrors.state && (
+                      <span className={styles.errorText}>{addressErrors.state}</span>
+                    )}
                   </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+
+                  <div className={styles.formGroup}>
+                    <label htmlFor="pincode-input">Pincode (6-digit)</label>
+                    <input
+                      id="pincode-input"
+                      type="text"
+                      name="pincode"
+                      value={newAddress.pincode}
+                      onChange={handleAddressChange}
+                      className={addressErrors.pincode ? styles.inputError : ''}
+                    />
+                    {addressErrors.pincode && (
+                      <span className={styles.errorText}>{addressErrors.pincode}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
-
-
         </div>
 
         {/* Right Column: Summaries */}
@@ -441,8 +396,6 @@ const Checkout = () => {
           </button>
         </div>
       </form>
-
-
     </div>
   );
 };
